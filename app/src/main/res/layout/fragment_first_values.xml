@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     tools:context="tk.forest_tales.gmeter.FirstValuesFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/firstValues"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/stub1" />
+        android:scrollbars="vertical"/>
 
 </FrameLayout>
