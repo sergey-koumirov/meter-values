@@ -17,24 +17,40 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
 
     public interface MeterClickListener {
         void onMeterClick(int position);
+        void onMeterLongClick(int position);
     }
 
     static class MeterViewHolder extends RecyclerView.ViewHolder {
 
         public TextView number;
 
-        public MeterViewHolder(View itemView, final MeterClickListener clickListener) {
+        public MeterViewHolder(View itemView, final MeterClickListener eventsListener) {
             super(itemView);
             number = (TextView) itemView.findViewById(R.id.meterNumber);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onMeterClick(getAdapterPosition());
+            itemView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (eventsListener != null) {
+                                eventsListener.onMeterClick(getAdapterPosition());
+                            }
+                        }
                     }
-                }
-            });
+            );
+
+            itemView.setOnLongClickListener(
+                    new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            if (eventsListener != null) {
+                                eventsListener.onMeterLongClick(getAdapterPosition());
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+            );
         }
     }
 

@@ -2,9 +2,11 @@ package tk.forest_tales.gmeter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.greenrobot.greendao.query.Query;
 
@@ -32,7 +35,7 @@ public class FirstValuesFragment extends Fragment {
 
     OnMeterSelectedListener mCallback;
     public interface OnMeterSelectedListener {
-        public void onMeterSelected(int meterId);
+        public void onMeterSelected(Long meterId);
     }
 
     public FirstValuesFragment() {
@@ -131,13 +134,36 @@ public class FirstValuesFragment extends Fragment {
     MetersAdapter.MeterClickListener meterClickListener = new MetersAdapter.MeterClickListener() {
         @Override
         public void onMeterClick(int position) {
-            Meter note = metersAdapter.getMeter(position);
-            Long noteId = note.getId();
+            Meter meter = metersAdapter.getMeter(position);
+            Long meterId = meter.getId();
+            mCallback.onMeterSelected(meterId);
+            Log.d("DaoExample", "onMeterClick");
+        }
 
-            meterDao.deleteByKey(noteId);
-            Log.d("DaoExample", "Deleted note, ID: " + noteId);
+        @Override
+        public void onMeterLongClick(final int position) {
 
-            updateMeters();
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Delete Meter")
+                    .setMessage("Sure?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(
+                            android.R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                    Meter meter = metersAdapter.getMeter(position);
+                                    Long meterId = meter.getId();
+                                    meterDao.deleteByKey(meterId);
+                                    updateMeters();
+
+                                    Log.d("DaoExample", "Deleted");
+                                    Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+
         }
     };
 

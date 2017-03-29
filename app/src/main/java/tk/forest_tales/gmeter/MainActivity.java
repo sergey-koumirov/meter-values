@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void onMeterSelected(int meterId){
-        Log.d("meter", Integer.toString(meterId) );
+    public void onMeterSelected(Long meterId){
+        Log.d("meter", Long.toString(meterId) );
 
         AllMeterValuesFragment af = new AllMeterValuesFragment();
         Bundle args = new Bundle();
-        args.putInt(AllMeterValuesFragment.METER_ID, meterId);
+        args.putLong(AllMeterValuesFragment.METER_ID, meterId);
         af.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
