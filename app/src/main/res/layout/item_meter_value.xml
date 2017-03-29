@@ -5,13 +5,20 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="6dp">
 
     <TextView
-        android:id="@+id/meterNumber"
+        android:id="@+id/meterValueDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        tools:text="Meter Number" />
+        tools:text="Date" />
+
+    <TextView
+        android:id="@+id/meterValueValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text="Value" />
 
 </LinearLayout>

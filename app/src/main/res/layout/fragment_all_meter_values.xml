@@ -1,12 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="tk.forest_tales.gmeter.AllMeterValuesFragment">
 
     <TextView
+        android:id="@+id/meterValueTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="All Values"
+        android:background="@color/colorAccent"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/allValues"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/stub2" />
+        android:scrollbars="vertical"/>
 
-</FrameLayout>
+</LinearLayout>

@@ -14,7 +14,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        DevOpenHelper helper = new DevOpenHelper(this, "meters-values-db");
+        ProdOpenHelper helper = new ProdOpenHelper(this, "meters-values-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }

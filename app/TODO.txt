@@ -1,0 +1,4 @@
+- add meter value
+- meter graphs
+- print month
+- settings (name, address, check day)

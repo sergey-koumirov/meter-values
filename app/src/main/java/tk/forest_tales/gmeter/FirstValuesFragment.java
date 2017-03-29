@@ -35,7 +35,7 @@ public class FirstValuesFragment extends Fragment {
 
     OnMeterSelectedListener mCallback;
     public interface OnMeterSelectedListener {
-        public void onMeterSelected(Long meterId);
+        public void onMeterSelected(Meter meter);
     }
 
     public FirstValuesFragment() {
@@ -135,9 +135,7 @@ public class FirstValuesFragment extends Fragment {
         @Override
         public void onMeterClick(int position) {
             Meter meter = metersAdapter.getMeter(position);
-            Long meterId = meter.getId();
-            mCallback.onMeterSelected(meterId);
-            Log.d("DaoExample", "onMeterClick");
+            mCallback.onMeterSelected(meter);
         }
 
         @Override
