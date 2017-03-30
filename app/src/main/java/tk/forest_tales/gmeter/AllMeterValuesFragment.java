@@ -27,6 +27,7 @@ public class AllMeterValuesFragment extends Fragment {
 
     final static String METER_ID = "meterId";
     final static String METER_NUMBER = "meterNumber";
+    final static String METER_NAME = "meterName";
 
     private MeterValueDao meterValueDao;
     private Query<MeterValue> meterValuesQuery;
@@ -101,8 +102,9 @@ public class AllMeterValuesFragment extends Fragment {
         recyclerView.setAdapter(meterValuesAdapter);
 
         String meterNumber = getArguments().getString(METER_NUMBER);
+        String meterName = getArguments().getString(METER_NAME);
         TextView title = (TextView)result.findViewById(R.id.meterValueTitle);
-        title.setText( String.format("Values for %s", meterNumber) );
+        title.setText( String.format("Values for %s (%s)", meterName, meterNumber) );
 
         return result;
     }

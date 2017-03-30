@@ -14,7 +14,8 @@ import android.widget.EditText;
 
 public class AddMeterDialog extends DialogFragment implements DialogInterface.OnClickListener{
 
-    public static final String NEW_METER_NUMBER = "weight";
+    public static final String NEW_METER_NUMBER = "meter_number";
+    public static final String NEW_METER_NAME = "meter_name";
 
     private View form=null;
 
@@ -33,10 +34,12 @@ public class AddMeterDialog extends DialogFragment implements DialogInterface.On
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        String result = ((EditText)form.findViewById(R.id.meterNumber)).getText().toString();
+        String number = ((EditText)form.findViewById(R.id.meterNumber)).getText().toString();
+        String name = ((EditText)form.findViewById(R.id.meterName)).getText().toString();
 
         Intent intent = new Intent();
-        intent.putExtra(NEW_METER_NUMBER, result);
+        intent.putExtra(NEW_METER_NUMBER, number);
+        intent.putExtra(NEW_METER_NAME, name);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
 
         Log.d(getClass().getSimpleName(), "onClick");

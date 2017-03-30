@@ -23,10 +23,12 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
     static class MeterViewHolder extends RecyclerView.ViewHolder {
 
         public TextView number;
+        public TextView name;
 
         public MeterViewHolder(View itemView, final MeterClickListener eventsListener) {
             super(itemView);
             number = (TextView) itemView.findViewById(R.id.meterNumber);
+            name = (TextView) itemView.findViewById(R.id.meterName);
 
             itemView.setOnClickListener(
                     new View.OnClickListener() {
@@ -78,6 +80,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
     public void onBindViewHolder(MetersAdapter.MeterViewHolder holder, int position) {
         Meter meter = dataset.get(position);
         holder.number.setText(meter.getNumber());
+        holder.name.setText(meter.getName());
     }
 
     @Override

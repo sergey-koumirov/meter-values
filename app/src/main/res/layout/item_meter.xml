@@ -8,10 +8,19 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/meterName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text="Meter Name" />
+
+    <TextView
         android:id="@+id/meterNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         tools:text="Meter Number" />
+
+
 
 </LinearLayout>

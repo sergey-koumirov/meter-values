@@ -24,7 +24,7 @@ public class MeterValue {
 
     private long meterId;
 
-    @ToOne
+    @ToOne(joinProperty = "meterId")
     private Meter meter;
 
 /** Used to resolve relations */
@@ -80,35 +80,39 @@ public void setMeterId(long meterId) {
     this.meterId = meterId;
 }
 
-@Generated(hash = 639784962)
-private transient boolean meter__refreshed;
+@Generated(hash = 442189471)
+private transient Long meter__resolvedKey;
 
 /** To-one relationship, resolved on first access. */
-@Generated(hash = 117684536)
+@Generated(hash = 1757995799)
 public Meter getMeter() {
-    if (meter != null || !meter__refreshed) {
+    long __key = this.meterId;
+    if (meter__resolvedKey == null || !meter__resolvedKey.equals(__key)) {
+        final DaoSession daoSession = this.daoSession;
         if (daoSession == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
         MeterDao targetDao = daoSession.getMeterDao();
-        targetDao.refresh(meter);
-        meter__refreshed = true;
+        Meter meterNew = targetDao.load(__key);
+        synchronized (this) {
+            meter = meterNew;
+            meter__resolvedKey = __key;
+        }
     }
     return meter;
 }
 
-/** To-one relationship, returned entity is not refreshed and may carry only the PK property. */
-@Generated(hash = 1195253527)
-public Meter peakMeter() {
-    return meter;
-}
-
 /** called by internal mechanisms, do not call yourself. */
-@Generated(hash = 1301700974)
-public void setMeter(Meter meter) {
+@Generated(hash = 738368930)
+public void setMeter(@NotNull Meter meter) {
+    if (meter == null) {
+        throw new DaoException(
+                "To-one property 'meterId' has not-null constraint; cannot set to-one to null");
+    }
     synchronized (this) {
         this.meter = meter;
-        meter__refreshed = true;
+        meterId = meter.getId();
+        meter__resolvedKey = meterId;
     }
 }
 

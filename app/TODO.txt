@@ -1,4 +1,7 @@
-- add meter value
+- add meter name column
+- adding meter value
 - meter graphs
 - print month
 - settings (name, address, check day)
+- cascade delete for meter & meter values
+- validate before save meter name, meter number, meter value date, meter value value

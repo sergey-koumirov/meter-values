@@ -21,6 +21,10 @@ public class Meter {
     @NotNull
     private String number;
 
+    @NotNull
+    private String name;
+
+
     @ToMany(referencedJoinProperty = "meterId")
     private List<MeterValue> meterValues;
 
@@ -32,10 +36,11 @@ private transient DaoSession daoSession;
 @Generated(hash = 1759983993)
 private transient MeterDao myDao;
 
-@Generated(hash = 73857465)
-public Meter(Long id, @NotNull String number) {
+@Generated(hash = 1514693048)
+public Meter(Long id, @NotNull String number, @NotNull String name) {
     this.id = id;
     this.number = number;
+    this.name = name;
 }
 
 @Generated(hash = 936842546)
@@ -120,6 +125,14 @@ public List<MeterValue> getMeterValues() {
 @Generated(hash = 332227949)
 public synchronized void resetMeterValues() {
     meterValues = null;
+}
+
+public String getName() {
+    return this.name;
+}
+
+public void setName(String name) {
+    this.name = name;
 }
 
 /** called by internal mechanisms, do not call yourself. */

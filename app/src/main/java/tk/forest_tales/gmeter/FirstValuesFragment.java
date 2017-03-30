@@ -35,7 +35,7 @@ public class FirstValuesFragment extends Fragment {
 
     OnMeterSelectedListener mCallback;
     public interface OnMeterSelectedListener {
-        public void onMeterSelected(Meter meter);
+        void onMeterSelected(Meter meter);
     }
 
     public FirstValuesFragment() {
@@ -120,9 +120,11 @@ public class FirstValuesFragment extends Fragment {
             switch (requestCode) {
                 case REQUEST_METER_NUMBER:
                     String meterNumber = data.getStringExtra(AddMeterDialog.NEW_METER_NUMBER);
+                    String meterName = data.getStringExtra(AddMeterDialog.NEW_METER_NAME);
 
                     Meter meter = new Meter();
                     meter.setNumber(meterNumber);
+                    meter.setName(meterName);
                     meterDao.insert(meter);
                     updateMeters();
 
@@ -154,8 +156,6 @@ public class FirstValuesFragment extends Fragment {
                                     Long meterId = meter.getId();
                                     meterDao.deleteByKey(meterId);
                                     updateMeters();
-
-                                    Log.d("DaoExample", "Deleted");
                                     Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
                                 }
                             })

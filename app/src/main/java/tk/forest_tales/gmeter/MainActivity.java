@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         Bundle args = new Bundle();
         args.putLong(AllMeterValuesFragment.METER_ID, meter.getId());
         args.putString(AllMeterValuesFragment.METER_NUMBER, meter.getNumber());
+        args.putString(AllMeterValuesFragment.METER_NAME, meter.getName());
         af.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
