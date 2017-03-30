@@ -1,5 +1,11 @@
-- meter graphs
-- print month
 - settings (name, address, check day)
-- cascade delete for meter & meter values
+
+- last value in meter list (red if less than check date - 2.days)
+
+- meter graphs
+
+- print month
+
 - validate before save meter name, meter number, meter value date, meter value value
+
+- backup

@@ -16,7 +16,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-
         QueryBuilder.LOG_SQL = true;
 
         ProdOpenHelper helper = new ProdOpenHelper(this, "meters-values-db");

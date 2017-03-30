@@ -7,6 +7,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.List;
 
@@ -28,7 +29,19 @@ public class Meter {
     @ToMany(referencedJoinProperty = "meterId")
     private List<MeterValue> meterValues;
 
-/** Used to resolve relations */
+    @Transient
+    private MeterValue lastValue;
+
+    public void setLastValue(MeterValue mv) {
+        this.lastValue = mv;
+    }
+    public MeterValue getLastValue() {
+        return this.lastValue;
+    }
+
+
+
+    /** Used to resolve relations */
 @Generated(hash = 2040040024)
 private transient DaoSession daoSession;
 

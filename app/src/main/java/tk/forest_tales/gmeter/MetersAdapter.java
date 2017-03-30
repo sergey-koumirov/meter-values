@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.greendao.query.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +26,15 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
 
         public TextView number;
         public TextView name;
+        public TextView lastDate;
+        public TextView lastValue;
 
         public MeterViewHolder(View itemView, final MeterClickListener eventsListener) {
             super(itemView);
             number = (TextView) itemView.findViewById(R.id.meterNumber);
             name = (TextView) itemView.findViewById(R.id.meterName);
+            lastDate = (TextView) itemView.findViewById(R.id.lastDate);
+            lastValue = (TextView) itemView.findViewById(R.id.lastValue);
 
             itemView.setOnClickListener(
                     new View.OnClickListener() {
@@ -81,6 +87,8 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
         Meter meter = dataset.get(position);
         holder.number.setText(meter.getNumber());
         holder.name.setText(meter.getName());
+        holder.lastDate.setText(meter.getLastValue().getDate());
+        holder.lastValue.setText(meter.getLastValue().getValue().toString());
     }
 
     @Override

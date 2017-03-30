@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.greendao.query.CountQuery;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class FirstValuesFragment extends Fragment {
 
     private MeterDao meterDao;
     private Query<Meter> metersQuery;
+    private Query<MeterValue> lastValueQuery;
+    private CountQuery<MeterValue> countValueQuery;
     private MetersAdapter metersAdapter;
 
     OnMeterSelectedListener mCallback;
@@ -51,7 +54,20 @@ public class FirstValuesFragment extends Fragment {
         DaoSession daoSession = ((App) getActivity().getApplication()).getDaoSession();
         meterDao = daoSession.getMeterDao();
 
-        metersQuery = meterDao.queryBuilder().orderAsc(MeterDao.Properties.Number).build();
+        metersQuery = meterDao.queryBuilder()
+                .orderAsc(MeterDao.Properties.Number, MeterDao.Properties.Id)
+                .build();
+
+        lastValueQuery = daoSession.getMeterValueDao().queryBuilder()
+                .where(MeterValueDao.Properties.MeterId.eq(-1))
+                .orderDesc(MeterValueDao.Properties.Date, MeterValueDao.Properties.Id)
+                .limit(1)
+                .build();
+
+        countValueQuery = daoSession.getMeterValueDao().queryBuilder()
+                .where(MeterValueDao.Properties.MeterId.eq(-1))
+                .buildCount();
+
         refreshMeters();
 
     }
@@ -71,7 +87,21 @@ public class FirstValuesFragment extends Fragment {
 
     private void refreshMeters() {
         List<Meter> meters = metersQuery.list();
-        metersAdapter.setMeters( meters );
+
+        for(Meter m: meters){
+            lastValueQuery.setParameter(0, m.getId());
+            List<MeterValue> mvs = lastValueQuery.list();
+            if(mvs.size() > 0){
+                m.setLastValue( mvs.get(0) );
+            }else{
+                MeterValue temp = new MeterValue();
+                temp.setDate("N/A");
+                temp.setValue(new Double(0));
+                m.setLastValue( temp );
+            }
+        }
+
+        metersAdapter.setMeters(meters);
     }
 
 
@@ -140,25 +170,35 @@ public class FirstValuesFragment extends Fragment {
 
         @Override
         public void onMeterLongClick(final int position) {
+            Meter meter = metersAdapter.getMeter(position);
+            countValueQuery.setParameter(0,meter.getId());
+            Long cnt = countValueQuery.count();
 
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Delete Meter")
-                    .setMessage("Sure?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(
-                            android.R.string.yes,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
+            if(cnt==0){
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete Meter")
+                        .setMessage("Sure?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(
+                                android.R.string.yes,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
 
-                                    Meter meter = metersAdapter.getMeter(position);
-                                    Long meterId = meter.getId();
-                                    meterDao.deleteByKey(meterId);
-                                    refreshMeters();
-                                    Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                    .setNegativeButton(android.R.string.no, null)
-                    .show();
+                                        Meter meter = metersAdapter.getMeter(position);
+                                        Long meterId = meter.getId();
+                                        meterDao.deleteByKey(meterId);
+
+                                        refreshMeters();
+                                        Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
+            }else{
+                Toast.makeText(getActivity(), "Has values. Can't delete.", Toast.LENGTH_SHORT).show();
+            }
+
+
 
         }
     };
