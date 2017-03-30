@@ -6,6 +6,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="value">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="label" parent="@style/value">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingRight">5dip</item>
     </style>
 
 </resources>

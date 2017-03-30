@@ -1,0 +1,28 @@
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory android:title="General">
+
+        <android.support.v7.preference.ListPreference
+            android:entries="@array/days"
+            android:entryValues="@array/days"
+            android:key="check_day"
+            android:title="Check day"
+            android:summary="%s"/>
+
+    </android.support.v7.preference.PreferenceCategory>
+
+
+    <android.support.v7.preference.PreferenceCategory android:title="Print">
+
+        <android.support.v7.preference.EditTextPreference
+            android:key="name"
+            android:title="Name"/>
+
+        <android.support.v7.preference.EditTextPreference
+            android:key="address"
+            android:title="Address"/>
+
+    </android.support.v7.preference.PreferenceCategory>
+
+
+</android.support.v7.preference.PreferenceScreen>

@@ -68,8 +68,6 @@ public class FirstValuesFragment extends Fragment {
                 .where(MeterValueDao.Properties.MeterId.eq(-1))
                 .buildCount();
 
-        refreshMeters();
-
     }
 
     @Override
@@ -79,6 +77,8 @@ public class FirstValuesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(metersAdapter);
+
+        refreshMeters();
 
         return(result);
     }

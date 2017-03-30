@@ -1,4 +1,4 @@
-- settings (name, address, check day)
+- double settings fragment(tag)
 
 - last value in meter list (red if less than check date - 2.days)
 
