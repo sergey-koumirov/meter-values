@@ -60,7 +60,7 @@ public class MeterValuesAdapter extends RecyclerView.Adapter<MeterValuesAdapter.
 
     @Override
     public MeterValuesAdapter.MeterValueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meter_value, parent, false);
         return new MeterValueViewHolder(view, clickListener);
     }
 

@@ -1,5 +1,3 @@
-- add meter name column
-- adding meter value
 - meter graphs
 - print month
 - settings (name, address, check day)

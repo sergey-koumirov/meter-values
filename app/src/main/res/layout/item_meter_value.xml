@@ -4,21 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="6dp">
 
     <TextView
         android:id="@+id/meterValueDate"
-        android:layout_width="match_parent"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         tools:text="Date" />
 
     <TextView
         android:id="@+id/meterValueValue"
-        android:layout_width="match_parent"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textAlignment="textEnd"
         tools:text="Value" />
 
 </LinearLayout>

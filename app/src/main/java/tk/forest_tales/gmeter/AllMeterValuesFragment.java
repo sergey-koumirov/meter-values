@@ -1,7 +1,9 @@
 package tk.forest_tales.gmeter;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +30,8 @@ import java.util.Random;
  */
 public class AllMeterValuesFragment extends Fragment {
 
+    private static final int REQUEST_METER_VALUE = 1;
+
     final static String METER_ID = "meterId";
     final static String METER_NUMBER = "meterNumber";
     final static String METER_NAME = "meterName";
@@ -32,6 +39,7 @@ public class AllMeterValuesFragment extends Fragment {
     private MeterValueDao meterValueDao;
     private Query<MeterValue> meterValuesQuery;
     private MeterValuesAdapter meterValuesAdapter;
+    private Long meterId = null;
 
     public AllMeterValuesFragment(){}
 
@@ -75,7 +83,7 @@ public class AllMeterValuesFragment extends Fragment {
         DaoSession daoSession = ((App) getActivity().getApplication()).getDaoSession();
         meterValueDao = daoSession.getMeterValueDao();
 
-        Long meterId = getArguments().getLong(METER_ID);
+        meterId = getArguments().getLong(METER_ID);
 
         meterValuesQuery = meterValueDao.queryBuilder()
                 .where(MeterValueDao.Properties.MeterId.eq(meterId))
@@ -107,6 +115,46 @@ public class AllMeterValuesFragment extends Fragment {
         title.setText( String.format("Values for %s (%s)", meterName, meterNumber) );
 
         return result;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.actions_all_meter_values, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.add_meter_value:
+                AddMeterValueDialog dialog = new AddMeterValueDialog();
+                dialog.setTargetFragment(this,REQUEST_METER_VALUE);
+                dialog.show(getFragmentManager(), dialog.getClass().getName());
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_METER_VALUE:
+                    String date = data.getStringExtra(AddMeterValueDialog.NEW_METER_VALUE_DATE);
+                    Double value = data.getDoubleExtra(AddMeterValueDialog.NEW_METER_VALUE_VALUE, 0);
+
+                    MeterValue meterValue = new MeterValue();
+                    meterValue.setMeterId(meterId);
+                    meterValue.setDate(date);
+                    meterValue.setValue(value);
+                    meterValueDao.insert(meterValue);
+
+                    refreshMeterValues();
+
+                    break;
+            }
+        }
     }
 
 }

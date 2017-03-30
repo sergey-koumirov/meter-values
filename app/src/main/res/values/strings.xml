@@ -7,4 +7,6 @@
     <string name="add_meter_dlg_title">Enter</string>
     <string name="meter_number">Meter Number</string>
     <string name="meter_name">Meter Name</string>
+    <string name="meter_value_date">Date</string>
+    <string name="meter_value_value">Value</string>
 </resources>

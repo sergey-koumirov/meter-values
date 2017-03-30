@@ -16,8 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.greenrobot.greendao.query.Query;
@@ -54,7 +52,7 @@ public class FirstValuesFragment extends Fragment {
         meterDao = daoSession.getMeterDao();
 
         metersQuery = meterDao.queryBuilder().orderAsc(MeterDao.Properties.Number).build();
-        updateMeters();
+        refreshMeters();
 
     }
 
@@ -71,7 +69,7 @@ public class FirstValuesFragment extends Fragment {
 
 
 
-    private void updateMeters() {
+    private void refreshMeters() {
         List<Meter> meters = metersQuery.list();
         metersAdapter.setMeters( meters );
     }
@@ -126,7 +124,7 @@ public class FirstValuesFragment extends Fragment {
                     meter.setNumber(meterNumber);
                     meter.setName(meterName);
                     meterDao.insert(meter);
-                    updateMeters();
+                    refreshMeters();
 
                     break;
             }
@@ -155,7 +153,7 @@ public class FirstValuesFragment extends Fragment {
                                     Meter meter = metersAdapter.getMeter(position);
                                     Long meterId = meter.getId();
                                     meterDao.deleteByKey(meterId);
-                                    updateMeters();
+                                    refreshMeters();
                                     Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
                                 }
                             })
