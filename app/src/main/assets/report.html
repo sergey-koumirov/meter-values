@@ -1,0 +1,36 @@
+<html>
+<head>
+    <style>
+        body{
+            font-size: 0.5cm;
+        }
+
+
+        .red{
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Пред.</th>
+            <th>Тек</th>
+            <th>Разница</th>
+        </tr>
+        {{#meters}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{number}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {{/meters}}
+    </table>
+
+</body>
+</html>
