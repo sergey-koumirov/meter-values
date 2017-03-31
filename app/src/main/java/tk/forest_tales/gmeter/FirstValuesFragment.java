@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +35,7 @@ public class FirstValuesFragment extends Fragment {
     private Query<MeterValue> lastValueQuery;
     private CountQuery<MeterValue> countValueQuery;
     private MetersAdapter metersAdapter;
+    private SharedPreferences prefs;
 
     OnMeterSelectedListener mCallback;
     public interface OnMeterSelectedListener {
@@ -68,6 +71,8 @@ public class FirstValuesFragment extends Fragment {
                 .where(MeterValueDao.Properties.MeterId.eq(-1))
                 .buildCount();
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
     }
 
     @Override
@@ -101,7 +106,10 @@ public class FirstValuesFragment extends Fragment {
             }
         }
 
-        metersAdapter.setMeters(meters);
+
+        Log.d("meter-prefs", prefs.getString("check_day","--------------------") );
+
+        metersAdapter.setMeters(meters, prefs);
     }
 
 

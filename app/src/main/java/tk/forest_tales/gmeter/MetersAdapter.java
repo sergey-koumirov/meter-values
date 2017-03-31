@@ -1,10 +1,12 @@
 package tk.forest_tales.gmeter;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.greendao.query.Query;
@@ -16,6 +18,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
 
     private MeterClickListener clickListener;
     private List<Meter> dataset;
+    private SharedPreferences prefs;
 
     public interface MeterClickListener {
         void onMeterClick(int position);
@@ -28,6 +31,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
         public TextView name;
         public TextView lastDate;
         public TextView lastValue;
+        public LinearLayout background;
 
         public MeterViewHolder(View itemView, final MeterClickListener eventsListener) {
             super(itemView);
@@ -35,6 +39,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
             name = (TextView) itemView.findViewById(R.id.meterName);
             lastDate = (TextView) itemView.findViewById(R.id.lastDate);
             lastValue = (TextView) itemView.findViewById(R.id.lastValue);
+            background = (LinearLayout) itemView;
 
             itemView.setOnClickListener(
                     new View.OnClickListener() {
@@ -67,8 +72,9 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
         this.dataset = new ArrayList<Meter>();
     }
 
-    public void setMeters(@NonNull List<Meter> meters) {
+    public void setMeters(@NonNull List<Meter> meters, SharedPreferences _prefs) {
         dataset = meters;
+        prefs = _prefs;
         notifyDataSetChanged();
     }
 
@@ -85,10 +91,15 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
     @Override
     public void onBindViewHolder(MetersAdapter.MeterViewHolder holder, int position) {
         Meter meter = dataset.get(position);
+
+        CheckService cs = new CheckService( new Integer(prefs.getString("check_day", "23")) );
+
+        holder.background.setBackgroundColor( cs.statusColor(meter.getLastValue()) );
+
         holder.number.setText(meter.getNumber());
         holder.name.setText(meter.getName());
         holder.lastDate.setText(meter.getLastValue().getDate());
-        holder.lastValue.setText(meter.getLastValue().getValue().toString());
+        holder.lastValue.setText( meter.getLastValue().getValue().toString() );
     }
 
     @Override
