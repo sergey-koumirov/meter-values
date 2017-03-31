@@ -1,4 +1,4 @@
-- print month
+- print month (last, prev values)
 
 - validate before save meter name, meter number, meter value date, meter value value
 

@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
+import org.greenrobot.greendao.query.Query;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,21 @@ public class Meter {
     }
     public MeterValue getLastValue() {
         return this.lastValue;
+    }
+
+    public static void setLastValues(List<Meter> meters, Query<MeterValue> lastValueQuery){
+        for(Meter m: meters){
+            lastValueQuery.setParameter(0, m.getId());
+            List<MeterValue> mvs = lastValueQuery.list();
+            if(mvs.size() > 0){
+                m.setLastValue( mvs.get(0) );
+            }else{
+                MeterValue temp = new MeterValue();
+                temp.setDate("N/A");
+                temp.setValue(new Double(0));
+                m.setLastValue( temp );
+            }
+        }
     }
 
 

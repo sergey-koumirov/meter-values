@@ -17,6 +17,8 @@ import android.webkit.WebViewClient;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 
+import org.greenrobot.greendao.query.Query;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -85,13 +87,21 @@ public class MainActivity extends AppCompatActivity
             case R.id.report:
                 Log.d("meter","Print");
 
-                List<Meter> meters = ((App)getApplication())
-                        .getDaoSession()
-                        .getMeterDao()
+                DaoSession daoSession = ((App)getApplication()).getDaoSession();
+
+                List<Meter> meters = daoSession.getMeterDao()
                         .queryBuilder()
                         .orderAsc(MeterDao.Properties.Number, MeterDao.Properties.Id)
                         .build()
                         .list();
+
+                Query<MeterValue> lastValueQuery = daoSession.getMeterValueDao().queryBuilder()
+                        .where(MeterValueDao.Properties.MeterId.eq(-1))
+                        .orderDesc(MeterValueDao.Properties.Date, MeterValueDao.Properties.Id)
+                        .limit(1)
+                        .build();
+
+                Meter.setLastValues(meters, lastValueQuery);
 
                 new PrinterService(this, new ReportData(meters) ).print();
                 return(true);

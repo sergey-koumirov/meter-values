@@ -92,23 +92,7 @@ public class FirstValuesFragment extends Fragment {
 
     private void refreshMeters() {
         List<Meter> meters = metersQuery.list();
-
-        for(Meter m: meters){
-            lastValueQuery.setParameter(0, m.getId());
-            List<MeterValue> mvs = lastValueQuery.list();
-            if(mvs.size() > 0){
-                m.setLastValue( mvs.get(0) );
-            }else{
-                MeterValue temp = new MeterValue();
-                temp.setDate("N/A");
-                temp.setValue(new Double(0));
-                m.setLastValue( temp );
-            }
-        }
-
-
-        Log.d("meter-prefs", prefs.getString("check_day","--------------------") );
-
+        Meter.setLastValues(meters, lastValueQuery);
         metersAdapter.setMeters(meters, prefs);
     }
 
