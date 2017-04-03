@@ -1,38 +1,18 @@
 package tk.forest_tales.gmeter;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.print.PrintAttributes;
-import android.print.PrintDocumentAdapter;
-import android.print.PrintJob;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
-
-import org.greenrobot.greendao.query.Query;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import android.widget.DatePicker;
 
 public class MainActivity extends AppCompatActivity
-        implements FirstValuesFragment.OnMeterSelectedListener {
+        implements FirstValuesFragment.OnMeterSelectedListener,
+        DatePickerDialog.OnDateSetListener {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 12;
 
@@ -92,11 +72,20 @@ public class MainActivity extends AppCompatActivity
                 return(true);
 
             case R.id.report:
-                new PrinterService(this, ReportData.getWithPreparedData(this)).print();
+                MonthYearPickerDialog pd = new MonthYearPickerDialog();
+                pd.setListener(this);
+                pd.show(getSupportFragmentManager(), "MonthYearPickerDialog");
                 return(true);
         }
 
         return(super.onOptionsItemSelected(item));
     }
+
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+        Log.d("meter", new Integer(year).toString());
+        Log.d("meter", new Integer(monthOfYear).toString());
+        Log.d("meter", new Integer(dayOfMonth).toString());
+        new PrinterService(this, ReportData.getWithPreparedData(this, year, monthOfYear)).print();
+    };
 
 }

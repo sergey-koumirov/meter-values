@@ -45,15 +45,18 @@ public class ReportData {
         return periodName;
     }
 
-    public static ReportData getWithPreparedData(AppCompatActivity context){
+    public static ReportData getWithPreparedData(AppCompatActivity context, int year, int month){
         DaoSession daoSession = ((App)context.getApplication()).getDaoSession();
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM");
-        Date currMonth = Calendar.getInstance().getTime();
+        Calendar curr = Calendar.getInstance();
+        curr.set(year, month-1, 1);
+        Date currMonth = curr.getTime();
 
-        Calendar prev = Calendar.getInstance();
+        Calendar prev = (Calendar)curr.clone();
         prev.add(Calendar.MONTH,-1);
         Date prevMonth = prev.getTime();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM");
         String currMonthStr = df.format(currMonth);
         String prevMonthStr = df.format(prevMonth);
         String periodName = new SimpleDateFormat("yyyy LLLL").format(currMonth);
