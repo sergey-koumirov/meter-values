@@ -70,9 +70,6 @@ public class FirstValuesFragment extends Fragment {
         countValueQuery = daoSession.getMeterValueDao().queryBuilder()
                 .where(MeterValueDao.Properties.MeterId.eq(-1))
                 .buildCount();
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-
     }
 
     @Override
@@ -82,6 +79,8 @@ public class FirstValuesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(metersAdapter);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         refreshMeters();
 

@@ -34,30 +34,47 @@ public class Meter {
     @ToMany(referencedJoinProperty = "meterId")
     private List<MeterValue> meterValues;
 
+
     @Transient
-    private MeterValue lastValue;
-
-    public void setLastValue(MeterValue mv) {
-        this.lastValue = mv;
+    private Double diff;
+    public Double getDiff() {
+        return tempValues[0].getValue() - tempValues[1].getValue();
     }
+
+    @Transient
+    private MeterValue[] tempValues = new MeterValue[2];
     public MeterValue getLastValue() {
-        return this.lastValue;
+        return this.tempValues[0];
+    }
+    public MeterValue getPrevValue() {
+        return this.tempValues[1];
     }
 
-    public static void setLastValues(List<Meter> meters, Query<MeterValue> lastValueQuery){
+    private static void setTempValues(List<Meter> meters, Query<MeterValue> valueQuery, int index){
         for(Meter m: meters){
-            lastValueQuery.setParameter(0, m.getId());
-            List<MeterValue> mvs = lastValueQuery.list();
+            valueQuery.setParameter(0, m.getId());
+            List<MeterValue> mvs = valueQuery.list();
             if(mvs.size() > 0){
-                m.setLastValue( mvs.get(0) );
+                m.tempValues[index] = mvs.get(0);
             }else{
                 MeterValue temp = new MeterValue();
                 temp.setDate("N/A");
                 temp.setValue(new Double(0));
-                m.setLastValue( temp );
+                m.tempValues[index] = temp;
             }
         }
     }
+
+    public static void setLastValues(List<Meter> meters, Query<MeterValue> valueQuery){
+        setTempValues(meters, valueQuery, 0);
+    }
+
+    public static void setPrevValues(List<Meter> meters, Query<MeterValue> valueQuery){
+        setTempValues(meters, valueQuery, 1);
+    }
+
+
+
 
 
 

@@ -9,13 +9,35 @@
         .red{
             color: #ff0000;
         }
+
+        .right{
+            text-align: right;
+        }
+
+        table{
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid #cccccc;
+        }
+
+        h4, h5 {
+            margin-top: 0;
+            margin-bottom: 0.25cm;
+        }
+
     </style>
 </head>
 <body>
 
+    <h4>{{name}}</h4>
+    <h5>{{address}}</h5>
+
     <table>
         <tr>
-            <th></th>
+            <th>{{periodName}}</th>
             <th>#</th>
             <th>Пред.</th>
             <th>Тек</th>
@@ -25,12 +47,17 @@
         <tr>
             <td>{{name}}</td>
             <td>{{number}}</td>
-            <td></td>
-            <td>{{lastValue.value}}</td>
-            <td></td>
+            <td class="right">{{prevValue.value}}</td>
+            <td class="right">{{lastValue.value}}</td>
+            <td class="right">{{diff}}</td>
         </tr>
         {{/meters}}
     </table>
+
+
+    <script language="javascript">
+        fileSaver.save();
+    </script>
 
 </body>
 </html>

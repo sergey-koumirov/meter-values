@@ -1,13 +1,17 @@
 package tk.forest_tales.gmeter;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +25,16 @@ import org.greenrobot.greendao.query.Query;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements FirstValuesFragment.OnMeterSelectedListener {
 
-    private WebView wv=null;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 12;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +84,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.settings:
                 FragmentManager fm = getSupportFragmentManager();
                 if(fm.findFragmentByTag(Prefs.FRAGMENT_TAG) == null){
-                    Log.d("meter","Settings null");
                     FragmentTransaction transaction = fm.beginTransaction();
                     transaction.replace(R.id.fragment_container, new Prefs(), Prefs.FRAGMENT_TAG);
                     transaction.addToBackStack(null);
@@ -85,27 +92,8 @@ public class MainActivity extends AppCompatActivity
                 return(true);
 
             case R.id.report:
-                Log.d("meter","Print");
-
-                DaoSession daoSession = ((App)getApplication()).getDaoSession();
-
-                List<Meter> meters = daoSession.getMeterDao()
-                        .queryBuilder()
-                        .orderAsc(MeterDao.Properties.Number, MeterDao.Properties.Id)
-                        .build()
-                        .list();
-
-                Query<MeterValue> lastValueQuery = daoSession.getMeterValueDao().queryBuilder()
-                        .where(MeterValueDao.Properties.MeterId.eq(-1))
-                        .orderDesc(MeterValueDao.Properties.Date, MeterValueDao.Properties.Id)
-                        .limit(1)
-                        .build();
-
-                Meter.setLastValues(meters, lastValueQuery);
-
-                new PrinterService(this, new ReportData(meters) ).print();
+                new PrinterService(this, ReportData.getWithPreparedData(this)).print();
                 return(true);
-
         }
 
         return(super.onOptionsItemSelected(item));
