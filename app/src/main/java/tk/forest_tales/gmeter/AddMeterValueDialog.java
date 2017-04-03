@@ -40,26 +40,26 @@ public class AddMeterValueDialog extends DialogFragment implements DialogInterfa
     @Override
     public void onClick(DialogInterface dialog, int which) {
         String date = ((EditText)form.findViewById(R.id.meterValueDate)).getText().toString();
-        Double value = Double.parseDouble( ((EditText)form.findViewById(R.id.meterValueValue)).getText().toString() );
+        Double value = 0.0;
+        try{
+            value = Double.parseDouble( ((EditText)form.findViewById(R.id.meterValueValue)).getText().toString() );
+        }catch(NumberFormatException e){
 
+        }
         Intent intent = new Intent();
         intent.putExtra(NEW_METER_VALUE_DATE, date);
         intent.putExtra(NEW_METER_VALUE_VALUE, value);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
-
-        Log.d(getClass().getSimpleName(), "onClick");
     }
 
     @Override
     public void onDismiss(DialogInterface unused) {
         super.onDismiss(unused);
-        Log.d(getClass().getSimpleName(), "onDismiss");
     }
 
     @Override
     public void onCancel(DialogInterface unused) {
         super.onCancel(unused);
-        Log.d(getClass().getSimpleName(), "onCancel");
     }
 
 }

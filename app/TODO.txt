@@ -1,7 +1,5 @@
 - select period for report
 
-- validate before save meter name, meter number, meter value date, meter value value
-
 - meter graphs
 
 - backup
