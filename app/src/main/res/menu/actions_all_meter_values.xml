@@ -2,9 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:compat="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/graphs"
+        android:icon="@drawable/graphs"
+        android:title="@string/graphs"
+        compat:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/add_meter_value"
         android:icon="@drawable/add_meter_value"
         android:title="@string/add"
         compat:showAsAction="always|withText" />
+
+
 
 </menu>

@@ -117,15 +117,9 @@ public class FirstValuesFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.add_meter:
-                Log.d("meter","Add Meter");
-
                 AddMeterDialog dialog = new AddMeterDialog();
                 dialog.setTargetFragment(this,REQUEST_METER_NUMBER);
                 dialog.show(getFragmentManager(), dialog.getClass().getName());
-
-                return(true);
-            case R.id.graphs:
-                Log.d("meter","Graphs");
                 return(true);
 
         }

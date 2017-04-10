@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +40,11 @@ public class AllMeterValuesFragment extends Fragment {
 
     private MeterValueDao meterValueDao;
     private Query<MeterValue> meterValuesQuery;
+    private Query<MeterValue> meterValuesQueryAsc;
     private MeterValuesAdapter meterValuesAdapter;
     private Long meterId = null;
+    String meterNumber = "";
+    String meterName = "";
 
     public AllMeterValuesFragment(){}
 
@@ -90,6 +95,11 @@ public class AllMeterValuesFragment extends Fragment {
                 .orderDesc(MeterValueDao.Properties.Date)
                 .build();
 
+        meterValuesQueryAsc = meterValueDao.queryBuilder()
+                .where(MeterValueDao.Properties.MeterId.eq(meterId))
+                .orderAsc(MeterValueDao.Properties.Date)
+                .build();
+
         refreshMeterValues();
 
     }
@@ -109,8 +119,8 @@ public class AllMeterValuesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(meterValuesAdapter);
 
-        String meterNumber = getArguments().getString(METER_NUMBER);
-        String meterName = getArguments().getString(METER_NAME);
+        meterNumber = getArguments().getString(METER_NUMBER);
+        meterName = getArguments().getString(METER_NAME);
         TextView title = (TextView)result.findViewById(R.id.meterValueTitle);
         title.setText( String.format("Values for %s (%s)", meterName, meterNumber) );
 
@@ -131,6 +141,23 @@ public class AllMeterValuesFragment extends Fragment {
                 dialog.setTargetFragment(this,REQUEST_METER_VALUE);
                 dialog.show(getFragmentManager(), dialog.getClass().getName());
                 return(true);
+
+            case R.id.graphs:
+                FragmentManager fm = getFragmentManager();
+
+                if(fm.findFragmentByTag(GraphsFragment.FRAGMENT_TAG) == null){
+                    FragmentTransaction transaction = fm.beginTransaction();
+
+                    GraphsFragment gf = new GraphsFragment();
+                    gf.setData(new GraphData(meterName, meterNumber, meterValuesQueryAsc.list()));
+
+                    transaction.replace(R.id.fragment_container, gf, GraphsFragment.FRAGMENT_TAG);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
+                return(true);
+
         }
         return(super.onOptionsItemSelected(item));
     }

@@ -82,9 +82,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-        Log.d("meter", new Integer(year).toString());
-        Log.d("meter", new Integer(monthOfYear).toString());
-        Log.d("meter", new Integer(dayOfMonth).toString());
         new PrinterService(this, ReportData.getWithPreparedData(this, year, monthOfYear)).print();
     };
 
