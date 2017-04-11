@@ -1,57 +1,37 @@
 package tk.forest_tales.gmeter;
 
-
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.series.BarGraphSeries;
-import com.jjoe64.graphview.series.DataPoint;
-
-import org.greenrobot.greendao.query.Query;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.ColumnChartView;
 
 
 public class GraphsFragment extends Fragment {
 
     public static String FRAGMENT_TAG = "Graphs";
 
-    private GraphData data = null;
-    BarGraphSeries<DataPoint> series = null;
+    private ColumnChartData data;
+
+    private GraphData rawData;
+
+    private ColumnChartView chart;
 
     public GraphsFragment(){}
 
-    public void setData(GraphData data) {
-        this.data = data;
-
-        DataPoint[] dataPoints = new DataPoint[data.getSeries().getPoints().size()];
-
-        int index = 0;
-        for(MeterValue mv: data.getSeries().getPoints()){
-            dataPoints[index] = new DataPoint(index, mv.getValue());
-            index++;
-        }
-
-        series = new BarGraphSeries<>(dataPoints);
-
+    public void setData(GraphData rawData) {
+        this.rawData = rawData;
     }
 
     @Override
@@ -63,29 +43,58 @@ public class GraphsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-
         View result=inflater.inflate(R.layout.fragment_graphs, parent, false);
-
-        GraphView graph = (GraphView)result.findViewById(R.id.graph);
-
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
-//        graph.getViewport().setMaxX(10.0);
-//        graph.getViewport().setMaxY(13.0);
-//        graph.getViewport().setMinX(0.0);
-//        graph.getViewport().setMinX(0.0);
-//        graph.getViewport().setXAxisBoundsManual(true);
-//        graph.getViewport().setYAxisBoundsManual(true);
-
-
-        graph.addSeries(series);
-        series.setTitle(data.getSeries().getTitle());
-        series.setSpacing(50);
-        series.setDrawValuesOnTop(true);
-        series.setValuesOnTopColor(Color.RED);
-
+        chart = (ColumnChartView)result.findViewById(R.id.chart);
+        generateDefaultData();
         return result;
+    }
+
+
+    private void generateDefaultData() {
+
+        List<Column> columns = new ArrayList<Column>();
+        List<SubcolumnValue> values;
+        List<AxisValue> xLabelValues = new ArrayList<AxisValue>();
+        int color = ChartUtils.pickColor();
+
+        float index = 0.0f;
+
+        for(MeterValue mv: rawData.getSeries().getPoints()){
+            values = new ArrayList<SubcolumnValue>();
+
+            SubcolumnValue value = new SubcolumnValue();
+            value.setColor(color);
+            value.setValue(new Float(mv.getValue()));
+            value.setLabel(mv.getDate());
+
+            AxisValue axisValue = new AxisValue(index);
+            axisValue.setLabel(mv.getDate());
+            xLabelValues.add(axisValue);
+
+            values.add(value);
+            Column column = new Column(values);
+            column.setHasLabels(false);
+            column.setHasLabelsOnlyForSelected(false);
+            columns.add(column);
+            index++;
+        }
+
+        data = new ColumnChartData(columns);
+
+        Axis axisX = new Axis();
+        axisX.setName("Month");
+        axisX.setHasTiltedLabels(false);
+
+        axisX.setValues(xLabelValues);
+
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setName("Value");
+
+
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
+
+        chart.setColumnChartData(data);
     }
 
 
