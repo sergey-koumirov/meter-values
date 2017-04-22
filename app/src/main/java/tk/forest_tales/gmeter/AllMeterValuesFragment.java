@@ -33,10 +33,6 @@ public class AllMeterValuesFragment extends Fragment {
 
     private static final int REQUEST_METER_VALUE = 1;
 
-    final static String METER_ID = "meterId";
-    final static String METER_NUMBER = "meterNumber";
-    final static String METER_NAME = "meterName";
-
     private MeterValueDao meterValueDao;
     private Query<MeterValue> meterValuesQuery;
     private Query<MeterValue> meterValuesGraphQueryAsc;
@@ -64,8 +60,6 @@ public class AllMeterValuesFragment extends Fragment {
                                     Long meterValueId = meterValue.getId();
                                     meterValueDao.deleteByKey(meterValueId);
                                     refreshMeterValues();
-
-                                    Log.d("DaoExample", "Deleted");
                                     Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -87,7 +81,7 @@ public class AllMeterValuesFragment extends Fragment {
         DaoSession daoSession = ((App) getActivity().getApplication()).getDaoSession();
         meterValueDao = daoSession.getMeterValueDao();
 
-        meterId = getArguments().getLong(METER_ID);
+        meterId = getArguments().getLong(App.METER_ID);
 
         meterValuesQuery = meterValueDao.queryBuilder()
                 .where(MeterValueDao.Properties.MeterId.eq(meterId))
@@ -119,8 +113,8 @@ public class AllMeterValuesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(meterValuesAdapter);
 
-        meterNumber = getArguments().getString(METER_NUMBER);
-        meterName = getArguments().getString(METER_NAME);
+        meterNumber = getArguments().getString(App.METER_NUMBER);
+        meterName = getArguments().getString(App.METER_NAME);
         TextView title = (TextView)result.findViewById(R.id.meterValueTitle);
         title.setText( String.format("Values for %s (%s)", meterName, meterNumber) );
 

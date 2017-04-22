@@ -14,14 +14,25 @@ import android.widget.EditText;
 
 public class AddMeterDialog extends DialogFragment implements DialogInterface.OnClickListener{
 
-    public static final String NEW_METER_NUMBER = "meter_number";
-    public static final String NEW_METER_NAME = "meter_name";
+    private View form = null;
 
-    private View form=null;
+    private Long meterId = null;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         form = getActivity().getLayoutInflater().inflate(R.layout.add_meter_dialog, null);
+
+        Bundle args = getArguments();
+        if(args != null){
+            EditText etName = (EditText)form.findViewById(R.id.meterName);
+            etName.setText(args.getString(App.METER_NAME));
+
+            EditText etNumber = (EditText)form.findViewById(R.id.meterNumber);
+            etNumber.setText(args.getString(App.METER_NUMBER));
+
+            meterId = args.getLong(App.METER_ID);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return(
                 builder.setTitle(R.string.add_meter_dlg_title)
@@ -38,23 +49,20 @@ public class AddMeterDialog extends DialogFragment implements DialogInterface.On
         String name = ((EditText)form.findViewById(R.id.meterName)).getText().toString();
 
         Intent intent = new Intent();
-        intent.putExtra(NEW_METER_NUMBER, number);
-        intent.putExtra(NEW_METER_NAME, name);
+        intent.putExtra(App.METER_NUMBER, number);
+        intent.putExtra(App.METER_NAME, name);
+        intent.putExtra(App.METER_ID, meterId);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
-
-        Log.d(getClass().getSimpleName(), "onClick");
     }
 
     @Override
     public void onDismiss(DialogInterface unused) {
         super.onDismiss(unused);
-        Log.d(getClass().getSimpleName(), "onDismiss");
     }
 
     @Override
     public void onCancel(DialogInterface unused) {
         super.onCancel(unused);
-        Log.d(getClass().getSimpleName(), "onCancel");
     }
 
 }

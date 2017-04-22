@@ -13,6 +13,10 @@ import tk.forest_tales.gmeter.DaoMaster.DevOpenHelper;
 
 public class App extends Application {
 
+    final static String METER_ID = "meterId";
+    final static String METER_NUMBER = "meterNumber";
+    final static String METER_NAME = "meterName";
+
     private DaoSession daoSession;
 
     @Override

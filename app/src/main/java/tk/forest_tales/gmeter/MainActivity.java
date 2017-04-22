@@ -14,8 +14,6 @@ public class MainActivity extends AppCompatActivity
         implements FirstValuesFragment.OnMeterSelectedListener,
         DatePickerDialog.OnDateSetListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 12;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +37,9 @@ public class MainActivity extends AppCompatActivity
     public void onMeterSelected(Meter meter){
         AllMeterValuesFragment af = new AllMeterValuesFragment();
         Bundle args = new Bundle();
-        args.putLong(AllMeterValuesFragment.METER_ID, meter.getId());
-        args.putString(AllMeterValuesFragment.METER_NUMBER, meter.getNumber());
-        args.putString(AllMeterValuesFragment.METER_NAME, meter.getName());
+        args.putLong(App.METER_ID, meter.getId());
+        args.putString(App.METER_NUMBER, meter.getNumber());
+        args.putString(App.METER_NAME, meter.getName());
         af.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

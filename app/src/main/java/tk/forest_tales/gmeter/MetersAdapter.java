@@ -3,9 +3,11 @@ package tk.forest_tales.gmeter;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
 
     public interface MeterClickListener {
         void onMeterClick(int position);
+        void onMeterEdit(int position);
         void onMeterLongClick(int position);
     }
 
@@ -64,6 +67,13 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
                         }
                     }
             );
+
+            Button b = (Button)itemView.findViewById(R.id.edit);
+            b.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    eventsListener.onMeterEdit(getAdapterPosition());
+                }
+            });
         }
     }
 
@@ -83,7 +93,7 @@ public class MetersAdapter extends RecyclerView.Adapter<MetersAdapter.MeterViewH
     }
 
     @Override
-    public MetersAdapter.MeterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MetersAdapter.MeterViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meter, parent, false);
         return new MeterViewHolder(view, clickListener);
     }

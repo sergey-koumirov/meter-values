@@ -46,7 +46,6 @@ public class PrinterService {
             webView.loadDataWithBaseURL(null, tmpl.execute( report ), "text/HTML", "UTF-8", null);
 
         }catch(IOException e){
-            Log.d("meter","Print error");
         }
     }
 

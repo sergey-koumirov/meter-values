@@ -1,6 +1,7 @@
 package tk.forest_tales.gmeter;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +29,10 @@ import java.util.List;
 
 public class FirstValuesFragment extends Fragment {
 
+    public static String FRAGMENT_TAG = "FirstValuesFragment";
+
     private static final int REQUEST_METER_NUMBER = 1;
+    private static final int EDIT_METER_NUMBER = 2;
 
     private MeterDao meterDao;
     private Query<Meter> metersQuery;
@@ -95,7 +99,6 @@ public class FirstValuesFragment extends Fragment {
         metersAdapter.setMeters(meters, prefs);
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -132,8 +135,8 @@ public class FirstValuesFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_METER_NUMBER:
-                    String meterNumber = data.getStringExtra(AddMeterDialog.NEW_METER_NUMBER);
-                    String meterName = data.getStringExtra(AddMeterDialog.NEW_METER_NAME);
+                    String meterNumber = data.getStringExtra(App.METER_NUMBER);
+                    String meterName = data.getStringExtra(App.METER_NAME);
 
                     Meter meter = new Meter();
                     meter.setNumber(meterNumber);
@@ -141,6 +144,17 @@ public class FirstValuesFragment extends Fragment {
                     meterDao.insert(meter);
                     refreshMeters();
 
+                    break;
+
+                case EDIT_METER_NUMBER:
+                    Long id = new Long(data.getLongExtra(App.METER_ID, -1 ));
+                    if(id!=-1){
+                        Meter m = meterDao.load(id);
+                        m.setName(data.getStringExtra(App.METER_NAME));
+                        m.setNumber(data.getStringExtra(App.METER_NUMBER));
+                        meterDao.update(m);
+                        refreshMeters();
+                    }
                     break;
             }
         }
@@ -151,6 +165,22 @@ public class FirstValuesFragment extends Fragment {
         public void onMeterClick(int position) {
             Meter meter = metersAdapter.getMeter(position);
             mCallback.onMeterSelected(meter);
+        }
+
+        @Override
+        public void onMeterEdit(int position) {
+            Meter meter = metersAdapter.getMeter(position);
+
+            AddMeterDialog dialog = new AddMeterDialog();
+
+            Bundle args = new Bundle();
+            args.putLong(App.METER_ID, meter.getId());
+            args.putString(App.METER_NUMBER, meter.getNumber());
+            args.putString(App.METER_NAME, meter.getName());
+            dialog.setArguments(args);
+
+            dialog.setTargetFragment(FirstValuesFragment.this, EDIT_METER_NUMBER);
+            dialog.show(getFragmentManager(), dialog.getClass().getName());
         }
 
         @Override
