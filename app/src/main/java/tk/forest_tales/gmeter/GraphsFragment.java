@@ -55,7 +55,7 @@ public class GraphsFragment extends Fragment {
         List<Column> columns = new ArrayList<Column>();
         List<SubcolumnValue> values;
         List<AxisValue> xLabelValues = new ArrayList<AxisValue>();
-        int color = ChartUtils.pickColor();
+        int color = ChartUtils.COLOR_GREEN;
 
         float index = 0.0f;
 
@@ -65,10 +65,10 @@ public class GraphsFragment extends Fragment {
             SubcolumnValue value = new SubcolumnValue();
             value.setColor(color);
             value.setValue(new Float(mv.getValue()));
-            value.setLabel(mv.getDate());
+            value.setLabel(mv.getDate().substring(0,7));
 
             AxisValue axisValue = new AxisValue(index);
-            axisValue.setLabel(mv.getDate());
+            axisValue.setLabel(mv.getDate().substring(0,7));
             xLabelValues.add(axisValue);
 
             values.add(value);
@@ -84,7 +84,7 @@ public class GraphsFragment extends Fragment {
         Axis axisX = new Axis();
         axisX.setName("Month");
         axisX.setHasTiltedLabels(false);
-
+        axisX.setTextSize(10);
         axisX.setValues(xLabelValues);
 
         Axis axisY = new Axis().setHasLines(true);

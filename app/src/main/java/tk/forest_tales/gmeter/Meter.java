@@ -38,7 +38,7 @@ public class Meter {
     @Transient
     private Double diff;
     public Double getDiff() {
-        return tempValues[0].getValue() - tempValues[1].getValue();
+        return Math.round((tempValues[0].getValue() - tempValues[1].getValue()) * 100) / 100.0;
     }
 
     @Transient

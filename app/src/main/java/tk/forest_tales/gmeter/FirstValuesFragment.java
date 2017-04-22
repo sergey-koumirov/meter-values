@@ -58,7 +58,7 @@ public class FirstValuesFragment extends Fragment {
         meterDao = daoSession.getMeterDao();
 
         metersQuery = meterDao.queryBuilder()
-                .orderAsc(MeterDao.Properties.Number, MeterDao.Properties.Id)
+                .orderAsc(MeterDao.Properties.Name, MeterDao.Properties.Id)
                 .build();
 
         lastValueQuery = daoSession.getMeterValueDao().queryBuilder()

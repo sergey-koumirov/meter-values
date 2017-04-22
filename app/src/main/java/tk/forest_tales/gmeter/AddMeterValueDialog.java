@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
@@ -28,13 +29,16 @@ public class AddMeterValueDialog extends DialogFragment implements DialogInterfa
         ((EditText)form.findViewById(R.id.meterValueDate)).setText( new SimpleDateFormat("yyyy-MM-dd").format(new Date()) );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        return(
-                builder.setTitle(R.string.add_meter_dlg_title)
-                        .setView(form)
-                        .setPositiveButton(android.R.string.ok, this)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create()
-        );
+
+        Dialog d = builder.setTitle(R.string.add_meter_dlg_title)
+                .setView(form)
+                .setPositiveButton(android.R.string.ok, this)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        return(d);
     }
 
     @Override

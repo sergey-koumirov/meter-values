@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by sergey.koumirov on 31/03/2017.
@@ -59,11 +60,13 @@ public class ReportData {
         DateFormat df = new SimpleDateFormat("yyyy-MM");
         String currMonthStr = df.format(currMonth);
         String prevMonthStr = df.format(prevMonth);
-        String periodName = new SimpleDateFormat("yyyy LLLL").format(currMonth);
+
+        SimpleDateFormat periodFormatter = new SimpleDateFormat("yyyy LLLL", new Locale("ru")) ;
+        String periodName = periodFormatter.format(currMonth);
 
         List<Meter> meters = daoSession.getMeterDao()
                 .queryBuilder()
-                .orderAsc(MeterDao.Properties.Number, MeterDao.Properties.Id)
+                .orderAsc(MeterDao.Properties.Name, MeterDao.Properties.Id)
                 .build()
                 .list();
 

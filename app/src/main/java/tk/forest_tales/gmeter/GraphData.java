@@ -16,14 +16,19 @@ public class GraphData {
         series.setTitle(String.format("%s (%s)", name, number));
 
         Double prevValue = 0.0;
+        int index = 0;
+        if(meterValues.size()>0){
+            prevValue = meterValues.get(0).getValue();
+        }
+        if(meterValues.size()>12){
+            index=1;
+        }
+
         List<MeterValue> temp = new ArrayList<MeterValue>();
 
-        for(MeterValue mv: meterValues){
-
-            Log.d("meter", new Double(mv.getValue() - prevValue).toString() );
-
-            temp.add( new MeterValue(null, mv.getDate(), mv.getValue() - prevValue, 0) );
-            prevValue = mv.getValue();
+        for(int i=index; i<meterValues.size(); i++){
+            temp.add( new MeterValue(null, meterValues.get(i).getDate(), meterValues.get(i).getValue() - prevValue, 0) );
+            prevValue = meterValues.get(i).getValue();
         }
         series.setPoints(temp);
     }

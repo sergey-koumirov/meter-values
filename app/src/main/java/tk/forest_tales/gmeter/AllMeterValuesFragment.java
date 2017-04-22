@@ -24,7 +24,6 @@ import android.widget.Toast;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.List;
-import java.util.Random;
 
 
 /**
@@ -40,7 +39,7 @@ public class AllMeterValuesFragment extends Fragment {
 
     private MeterValueDao meterValueDao;
     private Query<MeterValue> meterValuesQuery;
-    private Query<MeterValue> meterValuesQueryAsc;
+    private Query<MeterValue> meterValuesGraphQueryAsc;
     private MeterValuesAdapter meterValuesAdapter;
     private Long meterId = null;
     String meterNumber = "";
@@ -95,9 +94,10 @@ public class AllMeterValuesFragment extends Fragment {
                 .orderDesc(MeterValueDao.Properties.Date)
                 .build();
 
-        meterValuesQueryAsc = meterValueDao.queryBuilder()
+        meterValuesGraphQueryAsc = meterValueDao.queryBuilder()
                 .where(MeterValueDao.Properties.MeterId.eq(meterId))
                 .orderAsc(MeterValueDao.Properties.Date)
+                .limit(13)
                 .build();
 
         refreshMeterValues();
@@ -149,7 +149,7 @@ public class AllMeterValuesFragment extends Fragment {
                     FragmentTransaction transaction = fm.beginTransaction();
 
                     GraphsFragment gf = new GraphsFragment();
-                    gf.setData(new GraphData(meterName, meterNumber, meterValuesQueryAsc.list()));
+                    gf.setData(new GraphData(meterName, meterNumber, meterValuesGraphQueryAsc.list()));
 
                     transaction.replace(R.id.fragment_container, gf, GraphsFragment.FRAGMENT_TAG);
                     transaction.addToBackStack(null);
