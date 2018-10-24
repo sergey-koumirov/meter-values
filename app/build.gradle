@@ -32,6 +32,7 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.samskivert:jmustache:1.13'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.6'
     testCompile 'junit:junit:4.12'
 }
 
